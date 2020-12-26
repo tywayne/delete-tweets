@@ -1,0 +1,14 @@
+{
+  "name": "delete-tweets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "zip":"zip -r deleteTweets.zip *",
+    "updateFunc":"aws lambda update-function-code --function-name deleteTweets --zip-file fileb://./deleteTweets.zip",
+    "deploy": "npm run zip && npm run updateFunc"
+  },
+  "dependencies": {
+    "twitter-lite": "^0.14.0"
+  }
+}
