@@ -1,9 +1,27 @@
 # Delete Tweets!
 
-Node function, configured to be deployed on AWS Lambda for deleting tweets after a number of days.
+Lambda function, deployable to AWS Lambda for deleting tweets after a number of days.
 
-### Details
+## Details
 
-1. `.env.sample` is example of what env variables are needed on the Lambda Function setup
-1. `aws-cli` is used to upload the zip file, so that we can add local `node_modules` packages ( for the Twitter API Node client )
-1. The recurring nature of the function call is managed by `EventBridge (CloudWatch Events)` setup to run once per day.
+1. `.env.sample` is example of what env variables are needed on the Lambda config
+1. `aws-cli` is used to upload a zip file and update the code deployed on AWS
+1. The recurring nature of the function call is managed by `EventBridge (CloudWatch Events)` setup to run hourly.
+
+### Installation
+
+```bash
+npm i
+```
+
+### Deployment
+
+_Requirements: You must first_
+
+- install and configure `aws-cli` on your machine
+- create a Lambda function named `delete-tweets` in your AWS account
+- setup your Twitter client ENV variables based on the `.env.sample` provided in this repo
+
+```bash
+npm run deploy
+```
