@@ -1,4 +1,4 @@
 export default {
-  now: new Date(),
-  maxDaysAgo: Number.parseInt(process.env.MAX_DAYS_AGO as string, 10),
+	now: new Date(),
+	maxDaysAgo: Number.parseInt(process.env.MAX_DAYS_AGO as string, 10),
 };

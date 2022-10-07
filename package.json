@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && esbuild src/index.ts --bundle --outfile=index.js --platform=node --target=node14",
+    "build": "tsc && esbuild src/index.ts --bundle --outfile=index.js --platform=node --target=node16",
     "build:zip": "npm run build && zip -r delete-tweets.zip ./index.js",
-    "updateLambda": "aws lambda update-function-code --function-name delete-tweets --dry-run",
+    "updateLambda": "aws lambda update-function-code --function-name delete-tweets --zip-file fileb://./delete-tweets.zip",
     "deploy": "npm run build:zip && npm run updateLambda"
   },
   "dependencies": {

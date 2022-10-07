@@ -1,4 +1,5 @@
 *.zip
 **/node_modules
 .env
+index.js
 tsconfig.tsbuildinfo
