@@ -1,8 +1,8 @@
-const client = require("./client.js");
-const utils = require("./util.js");
+import client from "./client";
+import utils from "./util";
 
-const getFavorites = (options) => {
-  return client.get("favorites/list", {
+const getFavorites = (options?: object | undefined) => {
+  return client.get<TweetOrFavoriteRecord[]>("favorites/list", {
     user_id: process.env.USERNAME,
     count: 200,
     entities: false,
@@ -10,7 +10,7 @@ const getFavorites = (options) => {
   });
 };
 
-const deleteFavorite = (favorite) => {
+const deleteFavorite = (favorite: TweetOrFavoriteRecord) => {
   return client
     .post("favorites/destroy", { id: favorite.id_str })
     .then(() => {
@@ -21,16 +21,18 @@ const deleteFavorite = (favorite) => {
     .catch((e) => console.error(e, JSON.stringify(e, null, 2)));
 };
 
-const deleteFavoritesHandler = async (event, context) => {
+const deleteFavoritesHandler = async () => {
   try {
     let favorites = await getFavorites();
 
     console.log(`Found ${favorites.length} favorites...`);
 
     while (favorites.length) {
-      let lastFavoriteId;
+      let lastFavoriteId = "";
       for (let favorite of favorites) {
-        const tweetAge = utils.now - new Date(Date.parse(favorite.created_at));
+        const tweetAge =
+          utils.now.getTime() -
+          new Date(Date.parse(favorite.created_at)).getTime();
         const daysAgo = Math.floor(tweetAge / 60 / 60 / 24 / 1000);
 
         if (daysAgo >= utils.maxDaysAgo) {
@@ -54,4 +56,4 @@ const deleteFavoritesHandler = async (event, context) => {
   }
 };
 
-module.exports = deleteFavoritesHandler;
+export default deleteFavoritesHandler;

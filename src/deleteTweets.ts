@@ -1,8 +1,8 @@
-const client = require("./client.js");
-const utils = require("./util.js");
+import client from "./client";
+import utils from "./util";
 
-const getMoreTweets = (options) => {
-  return client.get("statuses/user_timeline", {
+const getMoreTweets = (options?: object | undefined) => {
+  return client.get<TweetOrFavoriteRecord[]>("statuses/user_timeline", {
     user_id: process.env.USERNAME,
     include_rts: true,
     count: 200,
@@ -10,18 +10,20 @@ const getMoreTweets = (options) => {
   });
 };
 
-const deleteTweet = (tweet) => {
+const deleteTweet = (tweet: TweetOrFavoriteRecord) => {
   return client.post("statuses/destroy", { id: tweet.id_str });
 };
 
-const deleteHandler = async () => {
+const deleteTweetHandler = async () => {
   try {
     let tweets = await getMoreTweets();
 
     while (tweets.length) {
-      let lastTweetId;
+      let lastTweetId = "";
       for (let tweet of tweets) {
-        const tweetAge = utils.now - new Date(Date.parse(tweet.created_at));
+        const tweetAge =
+          utils.now.getTime() -
+          new Date(Date.parse(tweet.created_at)).getTime();
         const daysAgo = Math.floor(tweetAge / 60 / 60 / 24 / 1000);
 
         if (daysAgo >= utils.maxDaysAgo) {
@@ -39,4 +41,4 @@ const deleteHandler = async () => {
   }
 };
 
-module.exports = deleteHandler;
+export default deleteTweetHandler;
