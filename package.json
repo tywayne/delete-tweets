@@ -1,14 +1,20 @@
 {
   "name": "delete-tweets",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "zip": "zip -r deleteTweets.zip *",
-    "updateFunc": "aws lambda update-function-code --function-name deleteTweets --zip-file fileb://./deleteTweets.zip",
-    "deploy": "npm run zip && npm run updateFunc"
+    "build": "tsc && esbuild src/index.ts --bundle --outfile=index.js --platform=node --target=node16",
+    "build:zip": "npm run build && zip -r delete-tweets.zip ./index.js",
+    "updateLambda": "aws lambda update-function-code --function-name delete-tweets --zip-file fileb://./delete-tweets.zip",
+    "deploy": "npm run build:zip && npm run updateLambda"
   },
   "dependencies": {
+    "esbuild": "^0.14.48",
     "twitter-lite": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "typescript": "^4.7.4"
   }
 }
